@@ -50,7 +50,7 @@ cd java-clean-code
 
 ### 사용 방법
 
-빌드된 `jar` 파일을 이용하여 검사하고 싶은 Java 프로젝트의 소스 경로를 입력합니다.
+빌드된 `jar` 파일을 이용하여 검사하고 싶은 Java 프로젝트의 소스 경로를 입력
 
 ```
 java -jar build/libs/code.jar /path/to/your/target/project/src/main/java
@@ -59,17 +59,20 @@ java -jar build/libs/code.jar /path/to/your/target/project/src/main/java
 ### 실행 결과 예시
 
 ```
-[INFO] Scanning project: /path/to/target/project...
-[FAIL] Found 3 violations!
+[INFO] Scanning project: /Users/me/my-project/src/main/java...
+[FAIL] Found 5 violations in 3 files!
 
-1. Order.java:45 [MethodLength]
-   - 메서드 길이가 20라인입니다. (제한: 15라인)
-   - 한 가지 기능만 하고 있는지 다시 확인해보세요.
+🔴 Order.java:45 [MethodLength]
+   - 메서드 길이가 20라인입니다. (허용 기준: 15라인)
+   - 한 가지 기능만 담당하도록 메서드를 더 작게 분리해보세요.
 
-2. Member.java:12 [NoSetter]
-   - 무분별한 Setter 사용이 감지되었습니다.
-   - 객체의 상태를 변경하는 명확한 의도를 가진 메서드를 만들어주세요.
+🟠 Member.java:12 [NoSetter]
+   - 핵심 도메인 객체에 무분별한 @Setter 사용이 감지되었습니다.
+   - 객체의 상태를 변경하는 '의도'가 드러나는 메서드(예: changeAddress())를 만들어주세요.
 
+🔴 Payment.java:30 [DemeterLaw]
+   - 한 줄에 너무 많은 점(.)이 사용되었습니다. (location.current.representation.substring(0, 1))
+   - 디미터 법칙("친구하고만 대화하라")을 위반했을 가능성이 큽니다. 내부 구조를 묻지 말고, 작업을 시키세요.
 ...
 ```
 
@@ -77,22 +80,39 @@ java -jar build/libs/code.jar /path/to/your/target/project/src/main/java
 
 ## 📋 지원 규칙 (Rules)
 
-현재 버전에서 지원하는 검사 규칙입니다.
+현재 버전에서 개발중인 검사 규칙
 
-### 🎨 Style & Clean Code
+### 🎨 Style 
+| 규칙 ID            | 설명                                  | 중요도 |
+|------------------|-------------------------------------|----|
+| NamingConvention | 패키지, 클래스, 상수 등의 명명 규칙               | 🔴 |
+| NoWildcardImport | 와일드카드 임포트 사용 금지                     | 🔴 |
+| ImportOrder      | 임포트 순서 검사                           | 🟠 |
+| ModifierOrder    | public static final 등 제어자의 표준 순서 강제 | 🟠 |
+| NoFinalizer      | Object.finalize 메서드 오버라이드 금지        | 🔴 |
+| OverloadGrouping | 오버로드된 메서드들은 코드 상에 인접                | 🟠 |
 
-| **규칙 ID** | **설명** | **기본값** |
-| --- | --- | --- |
-| IndentDepth | 메서드 내 들여쓰기(indent) 깊이 제한 | Max 2 |
-| MethodLength | 메서드 최대 길이 제한 | Max 15 lines |
-| NoElse | `else` 예약어 사용 지양 (Early Return 권장) | On |
+### 🧹Clean Code
 
-### ☕ Object-Oriented
+| 규칙 ID            | 설명                | 중요도 | 기본값    |
+|------------------|-------------------|-----|--------|
+| IndentDepth      | 메서드 내 들여쓰기 깊이 제한  |🔴| Max 2  |
+| InstanceVarCount | 클래스의 인스턴스 변수 개수 제한 |🟠| Max 2  |
+| MethodLength     | 메서드 최대 길이 제한      |🔴| Max 15 |
+| MethodParameter  | 메서드의 인자 수를 제한     |🔴| Max 3  |
+| NoElse           | `else` 예약어 사용 지양  |🟠| ON     |
+| LawOfDemeter     | 코드 한 줄에 점 사용을 줄여 결합도 낮춤	 |🟠| Max 1  |
+| NoHardcoding     | 하드코딩된 문자열이나 숫자 확인 |🟠| ON     |
 
-| **규칙 ID** | **설명** |
-| --- | --- |
-| NoDataClass | Getter/Setter만 있는 데이터 클래스(DTO 제외) 감지 및 경고 |
-| WrapPrimitive | (Experimental) 도메인 객체 내 과도한 원시값 사용 감지 |
+### ☕ OOP
+
+| 규칙 ID           | 설명                                        | 중요도 |
+|-----------------|-------------------------------------------|----|
+| NoDataClass     | Getter/Setter만 있는 데이터 클래스(DTO 제외) 감지 및 경고 | 🔴 |
+| WrapPrimitive   | 도메인 객체 내 과도한 원시값 사용 감지                    | 🟠 |
+| FirstCollection | 컬렉션을 포함한 클래스에서 다른 멤버 변수 있는지 확인   | 🟠 |
+
+
 
 ---
 
@@ -100,16 +120,21 @@ java -jar build/libs/code.jar /path/to/your/target/project/src/main/java
 
 ```
 src/main/java/clean/code
-├── Application.java       # 프로그램 진입점 (CLI 파싱)
-├── core/                  # 핵심 분석 엔진
-│   ├── ProjectScanner.java
-│   └── Analyzer.java
-├── parser/                # AST 파싱 로직 (JavaParser Wrapper)
-├── rules/                 # 검사 규칙 (인터페이스 및 구현체)
-│   ├── Rule.java
-│   ├── implementations/
-│   └── RuleRepository.java
-└── report/                # 분석 결과 출력 담당
+├── Application.java          # 프로그램 진입점 및 CLI 파서
+├── config                    # 규칙 On/Off 및 임계값 설정 관리
+├── core
+│   ├── ProjectScanner.java   # 디렉토리 재귀 탐색
+│   └── Analyzer.java         # 분석 엔진 메인 컨트롤러
+├── parser
+│   └── AstVisitor.java       # JavaParser 기반 AST 순회 로직
+├── rules                  # 검사 규칙 (인터페이스 및 구현체)
+│   ├── Rule.java             # 규칙 인터페이스
+│   ├── oop                   # 객체 지향 관련 규칙 구현체 (NoGetterSetter 등)
+│   ├── style                 # 스타일 관련 규칙 구현체 (Google Style)
+│   └── RuleRegistry.java     # 활성화된 규칙 관리
+└── report                 # 분석 결과 출력 담당
+    ├── Violation.java        # 위반 사항 데이터 모델
+    └── ConsoleReporter.java  # 사용자 친화적 결과 출력
 ```
 
 ---
@@ -119,6 +144,7 @@ src/main/java/clean/code
 - Language: Java 21
 - Build Tool: Gradle
 - Core Library: JavaParser (AST 분석)
+- CLI: Picocli (옵션 파싱)
 - Testing: JUnit 5, AssertJ
 
 ---
