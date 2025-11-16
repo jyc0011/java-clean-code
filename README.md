@@ -82,37 +82,36 @@ java -jar build/libs/code.jar /path/to/your/target/project/src/main/java
 
 현재 버전에서 개발중인 검사 규칙
 
-### 🎨 Style 
+### 🎨 Style
+
 | 규칙 ID            | 설명                                  | 중요도 |
-|------------------|-------------------------------------|----|
-| NamingConvention | 패키지, 클래스, 상수 등의 명명 규칙               | 🔴 |
-| NoWildcardImport | 와일드카드 임포트 사용 금지                     | 🔴 |
-| ImportOrder      | 임포트 순서 검사                           | 🟠 |
-| ModifierOrder    | public static final 등 제어자의 표준 순서 강제 | 🟠 |
-| NoFinalizer      | Object.finalize 메서드 오버라이드 금지        | 🔴 |
-| OverloadGrouping | 오버로드된 메서드들은 코드 상에 인접                | 🟠 |
+|------------------|-------------------------------------|-----|
+| NamingConvention | 패키지, 클래스, 상수 등의 명명 규칙               | 🔴  |
+| NoWildcardImport | 와일드카드 임포트 사용 금지                     | 🔴  |
+| ImportOrder      | 임포트 순서 검사                           | 🟠  |
+| ModifierOrder    | public static final 등 제어자의 표준 순서 강제 | 🟠  |
+| NoFinalizer      | Object.finalize 메서드 오버라이드 금지        | 🔴  |
+| OverloadGrouping | 오버로드된 메서드들은 코드 상에 인접                | 🟠  |
 
 ### 🧹Clean Code
 
-| 규칙 ID            | 설명                | 중요도 | 기본값    |
-|------------------|-------------------|-----|--------|
-| IndentDepth      | 메서드 내 들여쓰기 깊이 제한  |🔴| Max 2  |
-| InstanceVarCount | 클래스의 인스턴스 변수 개수 제한 |🟠| Max 2  |
-| MethodLength     | 메서드 최대 길이 제한      |🔴| Max 15 |
-| MethodParameter  | 메서드의 인자 수를 제한     |🔴| Max 3  |
-| NoElse           | `else` 예약어 사용 지양  |🟠| ON     |
-| LawOfDemeter     | 코드 한 줄에 점 사용을 줄여 결합도 낮춤	 |🟠| Max 1  |
-| NoHardcoding     | 하드코딩된 문자열이나 숫자 확인 |🟠| ON     |
+| 규칙 ID            | 설명                       | 중요도 | 기본값    |
+|------------------|--------------------------|-----|--------|
+| IndentDepth      | 메서드 내 들여쓰기 깊이 제한         | 🔴  | Max 2  |
+| InstanceVarCount | 클래스의 인스턴스 변수 개수 제한       | 🟠  | Max 2  |
+| MethodLength     | 메서드 최대 길이 제한             | 🔴  | Max 15 |
+| MethodParameter  | 메서드의 인자 수를 제한            | 🔴  | Max 3  |
+| NoElse           | `else` 예약어 사용 지양         | 🟠  | ON     |
+| LawOfDemeter     | 코드 한 줄에 점 사용을 줄여 결합도 낮춤	 | 🟠  | Max 1  |
+| NoHardcoding     | 하드코딩된 문자열이나 숫자 확인        | 🟠  | ON     |
 
 ### ☕ OOP
 
 | 규칙 ID           | 설명                                        | 중요도 |
-|-----------------|-------------------------------------------|----|
-| NoDataClass     | Getter/Setter만 있는 데이터 클래스(DTO 제외) 감지 및 경고 | 🔴 |
-| WrapPrimitive   | 도메인 객체 내 과도한 원시값 사용 감지                    | 🟠 |
-| FirstCollection | 컬렉션을 포함한 클래스에서 다른 멤버 변수 있는지 확인   | 🟠 |
-
-
+|-----------------|-------------------------------------------|-----|
+| NoDataClass     | Getter/Setter만 있는 데이터 클래스(DTO 제외) 감지 및 경고 | 🔴  |
+| WrapPrimitive   | 도메인 객체 내 과도한 원시값 사용 감지                    | 🟠  |
+| FirstCollection | 컬렉션을 포함한 클래스에서 다른 멤버 변수 있는지 확인            | 🟠  |
 
 ---
 
@@ -140,7 +139,9 @@ src/main/java/clean/code
 ---
 
 ## 🛠️ 기술 스택
+
 Picocli
+
 - Language: Java 21
 - Build Tool: Gradle
 - Core Library: JavaParser (AST 분석)
