@@ -22,6 +22,7 @@ public class CodeCheckRunner {
 
     /**
      * 메인 실행 로직
+     *
      * @param projectPath 검사할 프로젝트 경로
      */
     public void run(Path projectPath) {

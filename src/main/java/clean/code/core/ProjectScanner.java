@@ -14,6 +14,7 @@ public class ProjectScanner {
 
     /**
      * 지정된 경로와 그 하위 디렉토리에서 모든 .java 파일을 재귀적으로 찾음
+     *
      * @param projectPath 검사를 시작할 루트 디렉토리
      * @return .java 파일 경로 리스트
      */

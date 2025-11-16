@@ -3,6 +3,7 @@ package clean.code;
 import clean.code.config.AppConfig;
 import clean.code.core.CodeCheckRunner;
 import picocli.CommandLine;
+
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
