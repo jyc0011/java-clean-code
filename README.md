@@ -124,8 +124,6 @@ src/main/java/clean/code
 ├── core
 │   ├── ProjectScanner.java   # 디렉토리 재귀 탐색
 │   └── Analyzer.java         # 분석 엔진 메인 컨트롤러
-├── parser
-│   └── AstVisitor.java       # JavaParser 기반 AST 순회 로직
 ├── rules                     # 검사 규칙 (인터페이스 및 구현체)
 │   ├── cleancode             # 클린코드 관련 규칙 구현체
 │   │   ├── IndentDepthRule.java  
