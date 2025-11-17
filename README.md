@@ -126,10 +126,27 @@ src/main/java/clean/code
 │   └── Analyzer.java         # 분석 엔진 메인 컨트롤러
 ├── parser
 │   └── AstVisitor.java       # JavaParser 기반 AST 순회 로직
-├── rules                  # 검사 규칙 (인터페이스 및 구현체)
+├── rules                     # 검사 규칙 (인터페이스 및 구현체)
+│   ├── cleancode             # 클린코드 관련 규칙 구현체
+│   │   ├── IndentDepthRule.java  
+│   │   ├── InstanceVarCountRule.java  
+│   │   ├── LawOfDemeterRule.java  
+│   │   ├── MethodLengthRule.java  
+│   │   ├── MethodParameterRule.java  
+│   │   ├── NoElseRule.java  
+|   │   └── NoHardcodingRule.java  
+│   ├── oop                   # 객체 지향 관련 규칙 구현
+│   │   ├── FirstCollectionRule.java  
+│   │   ├── NoDataClassRule.java  
+|   │   └── WrapPrimitiveRule.java  
+│   ├── style                 # 스타일 관련 규칙 구현체
+│   │   ├── ImportOrderRule.java  
+│   │   ├── ModifierOrderRule.java  
+│   │   ├── NamingConventionRule.java  
+│   │   ├── NoFinalizerRule.java  
+│   │   ├── NoWildcardImportRule.java  
+|   │   └── OverloadGroupingRule.java  
 │   ├── Rule.java             # 규칙 인터페이스
-│   ├── oop                   # 객체 지향 관련 규칙 구현체 (NoGetterSetter 등)
-│   ├── style                 # 스타일 관련 규칙 구현체 (Google Style)
 │   └── RuleRegistry.java     # 활성화된 규칙 관리
 └── report                 # 분석 결과 출력 담당
     ├── Violation.java        # 위반 사항 데이터 모델
