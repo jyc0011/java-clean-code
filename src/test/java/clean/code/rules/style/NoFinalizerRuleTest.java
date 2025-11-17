@@ -41,7 +41,7 @@ class NoFinalizerRuleTest {
         String code = """
                     class Test {
                         // 파라미터가 있어서 오버라이드가 아님 (OK)
-                        public void finalize(boolean force) { 
+                        public void finalize(boolean force) {
                         }
                     }
                 """;

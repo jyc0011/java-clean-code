@@ -13,6 +13,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,10 +85,9 @@ public class ModifierOrderRule implements Rule {
             }
             List<Modifier.Keyword> actualKeywords = actualModifiers.stream()
                     .map(Modifier::getKeyword)
-                    .collect(Collectors.toList());
+                    .toList();
             List<Modifier.Keyword> expectedKeywords = new ArrayList<>(actualKeywords);
-            expectedKeywords.sort((k1, k2) ->
-                    Integer.compare(STANDARD_ORDER.indexOf(k1), STANDARD_ORDER.indexOf(k2))
+            expectedKeywords.sort(Comparator.comparingInt(STANDARD_ORDER::indexOf)
             );
             if (!actualKeywords.equals(expectedKeywords)) {
                 int line = node.getRange().map(r -> r.begin.line).orElse(1);

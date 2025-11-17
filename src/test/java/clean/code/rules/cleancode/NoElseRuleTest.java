@@ -72,7 +72,7 @@ class NoElseRuleTest {
                     class Test {
                         void method(int x) {
                             // Guard clause
-                            if (x <= 0) { 
+                            if (x <= 0) {
                                 return;
                             }
                             System.out.println("Positive");

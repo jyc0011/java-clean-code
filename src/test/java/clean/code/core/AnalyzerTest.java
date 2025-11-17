@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
-import com.github.javaparser.StaticJavaParser;
+
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,7 +35,6 @@ class AnalyzerTest {
         String javaCode = "class Test { }";
         Path javaFile = tempDir.resolve("Test.java");
         Files.writeString(javaFile, javaCode);
-        CompilationUnit ast = StaticJavaParser.parse(javaCode);
         Violation violation1 = new Violation(javaFile, 1, "Rule1", "Error 1");
         Violation violation2 = new Violation(javaFile, 2, "Rule2", "Error 2");
         when(mockRule1.check(any(Path.class), any(CompilationUnit.class))).thenReturn(List.of(violation1));

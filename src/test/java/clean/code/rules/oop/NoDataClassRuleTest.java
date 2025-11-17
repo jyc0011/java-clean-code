@@ -50,7 +50,7 @@ class NoDataClassRuleTest {
                         public String getName() { return name; }
                         
                         // Getter/Setter가 아닌 로직
-                        public void changeName(String newName) { 
+                        public void changeName(String newName) {
                             this.name = newName;
                         }
                     }
@@ -65,7 +65,7 @@ class NoDataClassRuleTest {
     void check_passesDtoClass() {
         String code = """
                     // DTO는 Getter/Setter만 있어도 허용
-                    public class UserDTO { 
+                    public class UserDTO {
                         private String name;
                         public String getName() { return name; }
                         public void setName(String name) { this.name = name; }
