@@ -2,7 +2,6 @@ package clean.code.core;
 
 import clean.code.report.ConsoleReporter;
 import clean.code.report.Violation;
-
 import java.nio.file.Path;
 import java.util.List;
 
