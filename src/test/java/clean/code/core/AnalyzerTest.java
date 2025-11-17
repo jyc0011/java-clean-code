@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
-
 import clean.code.rules.Severity;
 import com.github.javaparser.ast.CompilationUnit;
 import java.io.IOException;

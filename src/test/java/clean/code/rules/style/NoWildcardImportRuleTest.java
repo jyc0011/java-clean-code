@@ -22,12 +22,12 @@ class NoWildcardImportRuleTest {
     @DisplayName("일반 와일드카드 임포트(import java.util.*;)를 감지한다.")
     void check_detectsNormalWildcardImport() {
         String code = """
-            package com.test;
-            
-            import java.util.*;
-            
-            class Test {}
-        """;
+                    package com.test;
+                    
+                    import java.util.*;
+                    
+                    class Test {}
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -42,12 +42,12 @@ class NoWildcardImportRuleTest {
     @DisplayName("Static 와일드카드 임포트(import static ... *)를 감지한다.")
     void check_detectsStaticWildcardImport() {
         String code = """
-            package com.test;
-            
-            import static org.assertj.core.api.Assertions.*;
-            
-            class Test {}
-        """;
+                    package com.test;
+                    
+                    import static org.assertj.core.api.Assertions.*;
+                    
+                    class Test {}
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -61,13 +61,13 @@ class NoWildcardImportRuleTest {
     @DisplayName("일반 임포트(import java.util.List;)는 통과시킨다.")
     void check_passesNormalImports() {
         String code = """
-            package com.test;
-            
-            import java.util.List;
-            import java.util.Map;
-            
-            class Test {}
-        """;
+                    package com.test;
+                    
+                    import java.util.List;
+                    import java.util.Map;
+                    
+                    class Test {}
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();

@@ -66,8 +66,7 @@ public class NoHardcodingRule implements Rule {
         private boolean isConstantOrAnnotation(Node node) {
             Node parent = node.getParentNode().orElse(null);
             while (parent != null) {
-                if (parent instanceof FieldDeclaration) {
-                    FieldDeclaration field = (FieldDeclaration) parent;
+                if (parent instanceof FieldDeclaration field) {
                     if (field.isStatic() && field.isFinal()) {
                         return true;
                     }

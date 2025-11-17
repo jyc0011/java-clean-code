@@ -22,13 +22,13 @@ class NoHardcodingRuleTest {
     @DisplayName("매직 스트링(String) 리터럴을 감지한다.")
     void check_detectsMagicString() {
         String code = """
-            class Test {
-                void checkStatus(String status) {
-                    if (status.equals("ACTIVE")) {
+                    class Test {
+                        void checkStatus(String status) {
+                            if (status.equals("ACTIVE")) {
+                            }
+                        }
                     }
-                }
-            }
-        """;
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -43,12 +43,12 @@ class NoHardcodingRuleTest {
     @DisplayName("매직 넘버(Integer) 리터럴을 감지한다.")
     void check_detectsMagicNumber() {
         String code = """
-            class Test {
-                int getValue() {
-                    return 100;
-                }
-            }
-        """;
+                    class Test {
+                        int getValue() {
+                            return 100;
+                        }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -62,16 +62,16 @@ class NoHardcodingRuleTest {
     @DisplayName("static final 상수 선언의 리터럴은 무시한다.")
     void check_ignoresStaticFinalConstants() {
         String code = """
-            class Test {
-                private static final String ACTIVE_STATUS = "ACTIVE";
-                private static final int MAX_COUNT = 100;
-                
-                void checkStatus(String status) {
-                    if (status.equals(ACTIVE_STATUS)) {
+                    class Test {
+                        private static final String ACTIVE_STATUS = "ACTIVE";
+                        private static final int MAX_COUNT = 100;
+                        
+                        void checkStatus(String status) {
+                            if (status.equals(ACTIVE_STATUS)) {
+                            }
+                        }
                     }
-                }
-            }
-        """;
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();
@@ -81,12 +81,12 @@ class NoHardcodingRuleTest {
     @DisplayName("Annotation의 인자로 사용된 리터럴은 무시한다.")
     void check_ignoresAnnotationLiterals() {
         String code = """
-            @DisplayName("TDD 테스트")
-            class Test {
-                @Deprecated(since = "1.5")
-                int value = 5;
-            }
-        """;
+                    @DisplayName("TDD 테스트")
+                    class Test {
+                        @Deprecated(since = "1.5")
+                        int value = 5;
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);

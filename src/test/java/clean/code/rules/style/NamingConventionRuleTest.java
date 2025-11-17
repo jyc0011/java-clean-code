@@ -74,15 +74,15 @@ class NamingConventionRuleTest {
     @DisplayName("모든 명명 규칙을 준수한 경우 통과시킨다.")
     void check_passesCorrectNames() {
         String code = """
-            package com.example.good;
-            
-            class GoodClassName {
-                private static final int MY_CONSTANT = 10;
-                private String myField;
-                
-                void myMethodName() {}
-            }
-        """;
+                    package com.example.good;
+                    
+                    class GoodClassName {
+                        private static final int MY_CONSTANT = 10;
+                        private String myField;
+                        
+                        void myMethodName() {}
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();

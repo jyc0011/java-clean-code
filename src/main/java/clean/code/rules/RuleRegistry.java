@@ -41,21 +41,27 @@ public class RuleRegistry {
 
     public List<Rule> getActiveRules() {
         List<Rule> activeRules = new ArrayList<>();
-        addRuleIfEnabled(activeRules, "IndentDepth",      (c) -> new IndentDepthRule(c.max(DEFAULT_INDENT_DEPTH), DEFAULT_INDENT_SIZE, Severity.HIGH)); // 🔴
-        addRuleIfEnabled(activeRules, "InstanceVarCount", (c) -> new InstanceVarCountRule(c.max(DEFAULT_INSTANCE_VAR_COUNT), Severity.MEDIUM)); // 🟠
-        addRuleIfEnabled(activeRules, "MethodLength",     (c) -> new MethodLengthRule(c.max(DEFAULT_METHOD_LENGTH_LIMIT), Severity.HIGH)); // 🔴
-        addRuleIfEnabled(activeRules, "MethodParameter",  (c) -> new MethodParameterRule(c.max(DEFAULT_METHOD_PARAM_COUNT), Severity.HIGH)); // 🔴
-        addRuleIfEnabled(activeRules, "NoElse",           () -> new NoElseRule(Severity.MEDIUM)); // 🟠
-        addRuleIfEnabled(activeRules, "LawOfDemeter",     (c) -> new LawOfDemeterRule(c.max(DEFAULT_DOT_COUNT), Severity.MEDIUM)); // 🟠
-        addRuleIfEnabled(activeRules, "NoHardcoding",     () -> new NoHardcodingRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "IndentDepth",
+                (c) -> new IndentDepthRule(c.max(DEFAULT_INDENT_DEPTH), DEFAULT_INDENT_SIZE, Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "InstanceVarCount",
+                (c) -> new InstanceVarCountRule(c.max(DEFAULT_INSTANCE_VAR_COUNT), Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "MethodLength",
+                (c) -> new MethodLengthRule(c.max(DEFAULT_METHOD_LENGTH_LIMIT), Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "MethodParameter",
+                (c) -> new MethodParameterRule(c.max(DEFAULT_METHOD_PARAM_COUNT), Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "NoElse", () -> new NoElseRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "LawOfDemeter",
+                (c) -> new LawOfDemeterRule(c.max(DEFAULT_DOT_COUNT), Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "NoHardcoding", () -> new NoHardcodingRule(Severity.MEDIUM)); // 🟠
         addRuleIfEnabled(activeRules, "NamingConvention", () -> new NamingConventionRule(Severity.HIGH)); // 🔴
         addRuleIfEnabled(activeRules, "NoWildcardImport", () -> new NoWildcardImportRule(Severity.HIGH)); // 🔴
-        addRuleIfEnabled(activeRules, "ImportOrder",      () -> new ImportOrderRule(Severity.MEDIUM)); // 🟠
-        addRuleIfEnabled(activeRules, "ModifierOrder",    () -> new ModifierOrderRule(Severity.MEDIUM)); // 🟠
-        addRuleIfEnabled(activeRules, "NoFinalizer",      () -> new NoFinalizerRule(Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "ImportOrder", () -> new ImportOrderRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "ModifierOrder", () -> new ModifierOrderRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "NoFinalizer", () -> new NoFinalizerRule(Severity.HIGH)); // 🔴
         addRuleIfEnabled(activeRules, "OverloadGrouping", () -> new OverloadGroupingRule(Severity.MEDIUM)); // 🟠
-        addRuleIfEnabled(activeRules, "NoDataClass",     () -> new NoDataClassRule(Severity.HIGH)); // 🔴
-        addRuleIfEnabled(activeRules, "WrapPrimitive",   (c) -> new WrapPrimitiveRule(c.max(DEFAULT_PRIMITIVE_WRAP_COUNT), Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "NoDataClass", () -> new NoDataClassRule(Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "WrapPrimitive",
+                (c) -> new WrapPrimitiveRule(c.max(DEFAULT_PRIMITIVE_WRAP_COUNT), Severity.MEDIUM)); // 🟠
         addRuleIfEnabled(activeRules, "FirstCollection", () -> new FirstCollectionRule(Severity.MEDIUM)); // 🟠
 
         return activeRules;

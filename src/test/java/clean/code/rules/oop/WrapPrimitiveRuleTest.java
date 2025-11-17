@@ -22,10 +22,10 @@ class WrapPrimitiveRuleTest {
     @DisplayName("메서드 인자에 원시값(int, String)이 2개 이상이면 감지한다.")
     void check_detectsPrimitivesInMethodParams() {
         String code = """
-            class Test {
-                public void updateInfo(int age, String name) {}
-            }
-        """;
+                    class Test {
+                        public void updateInfo(int age, String name) {}
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -40,10 +40,10 @@ class WrapPrimitiveRuleTest {
     @DisplayName("생성자 인자에 원시값이 2개 이상이면 감지한다.")
     void check_detectsPrimitivesInConstructorParams() {
         String code = """
-            class Test {
-                public Test(long id, String email) {}
-            }
-        """;
+                    class Test {
+                        public Test(long id, String email) {}
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -54,13 +54,13 @@ class WrapPrimitiveRuleTest {
     @DisplayName("원시값이 1개이거나, Wrapper/Object를 사용하면 통과시킨다.")
     void check_passesSinglePrimitiveOrWrapper() {
         String code = """
-            class Test {
-                public void updateAge(int age) {}
-                public void updateName(String name) {}
-                public void updatePoint(Long points) {}
-                public void check(Object order) {}
-            }
-        """;
+                    class Test {
+                        public void updateAge(int age) {}
+                        public void updateName(String name) {}
+                        public void updatePoint(Long points) {}
+                        public void check(Object order) {}
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();

@@ -65,8 +65,7 @@ public class OverloadGroupingRule implements Rule {
                 if (currentMemberName != null) {
                     if (currentMemberName.equals(lastMemberName)) {
                         // OK
-                    }
-                    else {
+                    } else {
                         if (membersSeenSoFar.contains(currentMemberName)) {
                             String message = String.format(
                                     "오버로드된 '%s'이(가) 이전에 나타났지만, 다른 멤버에 의해 분리되었습니다.",
@@ -77,8 +76,7 @@ public class OverloadGroupingRule implements Rule {
                         membersSeenSoFar.add(currentMemberName);
                         lastMemberName = currentMemberName;
                     }
-                }
-                else {
+                } else {
                     lastMemberName = null;
                 }
             }

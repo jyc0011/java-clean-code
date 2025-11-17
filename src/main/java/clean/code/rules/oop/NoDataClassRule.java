@@ -58,11 +58,11 @@ public class NoDataClassRule implements Rule {
             boolean hasOnlyGettersSettersConstructors = true;
 
             for (BodyDeclaration<?> member : n.getMembers()) {
-                if (member.isFieldDeclaration() || member.isConstructorDeclaration() || member.isInitializerDeclaration()) {
+                if (member.isFieldDeclaration() || member.isConstructorDeclaration()
+                    || member.isInitializerDeclaration()) {
                     continue;
                 }
-                if (member instanceof MethodDeclaration) {
-                    MethodDeclaration md = (MethodDeclaration) member;
+                if (member instanceof MethodDeclaration md) {
                     if (!isGetter(md) && !isSetter(md)) {
                         hasOnlyGettersSettersConstructors = false;
                         break;
@@ -71,7 +71,8 @@ public class NoDataClassRule implements Rule {
             }
 
             if (hasFields && hasOnlyGettersSettersConstructors) {
-                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, MESSAGE, severity));
+                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, MESSAGE,
+                        severity));
             }
         }
 
@@ -84,11 +85,8 @@ public class NoDataClassRule implements Rule {
                 return true;
             }
             String typeName = md.getType().asString();
-            if (name.startsWith("is") && name.length() > 2 && Character.isUpperCase(name.charAt(2)) &&
-                (typeName.equals("boolean") || typeName.equals("Boolean"))) {
-                return true;
-            }
-            return false;
+            return name.startsWith("is") && name.length() > 2 && Character.isUpperCase(name.charAt(2)) &&
+                   (typeName.equals("boolean") || typeName.equals("Boolean"));
         }
 
         private boolean isSetter(MethodDeclaration md) {

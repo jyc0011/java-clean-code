@@ -22,11 +22,11 @@ class MethodParameterRuleTest {
     @DisplayName("인자가 4개인 메서드를 감지한다.")
     void check_detectsMethodWith4Params() {
         String code = """
-            class Test {
-                void tooMany(int a, int b, String c, Object d) {
-                }
-            }
-        """;
+                    class Test {
+                        void tooMany(int a, int b, String c, Object d) {
+                        }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -40,11 +40,11 @@ class MethodParameterRuleTest {
     @DisplayName("인자가 4개인 생성자를 감지한다.")
     void check_detectsConstructorWith4Params() {
         String code = """
-            class Test {
-                Test(int a, int b, String c, Object d) {
-                }
-            }
-        """;
+                    class Test {
+                        Test(int a, int b, String c, Object d) {
+                        }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -56,11 +56,11 @@ class MethodParameterRuleTest {
     @DisplayName("인자가 3개 이하인 메서드/생성자는 통과시킨다.")
     void check_passesMethodsWith3OrLessParams() {
         String code = """
-            class Test {
-                Test(int a, int b, String c) { }
-                void ok(int a, int b) { }
-            }
-        """;
+                    class Test {
+                        Test(int a, int b, String c) { }
+                        void ok(int a, int b) { }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();

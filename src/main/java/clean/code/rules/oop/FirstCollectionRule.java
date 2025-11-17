@@ -20,11 +20,10 @@ public class FirstCollectionRule implements Rule {
 
     private static final String RULE_ID = "FirstCollection";
     private static final String MESSAGE = "일급 컬렉션(Collection)을 포함한 클래스는 다른 멤버 변수를 가질 수 없습니다.";
-    private final Severity severity;
-
     private static final Set<String> COLLECTION_TYPES = Set.of(
             "Collection", "List", "Set", "Queue", "Deque", "Map"
     );
+    private final Severity severity;
 
     public FirstCollectionRule(Severity severity) {
         this.severity = severity;
@@ -72,7 +71,8 @@ public class FirstCollectionRule implements Rule {
             }
 
             if (hasCollection && instanceFields.size() > 1) {
-                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, MESSAGE, severity));
+                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, MESSAGE,
+                        severity));
             }
         }
 

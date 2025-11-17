@@ -18,5 +18,6 @@ public interface Rule {
      * @return 이 규칙에 의해 발견된 위반 사항 리스트
      */
     List<Violation> check(Path filePath, CompilationUnit ast);
+
     Severity getSeverity();
 }

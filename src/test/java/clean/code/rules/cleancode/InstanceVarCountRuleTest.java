@@ -22,12 +22,12 @@ class InstanceVarCountRuleTest {
     @DisplayName("인스턴스 변수가 3개인 클래스를 감지한다.")
     void check_detectsClassWith3InstanceVars() {
         String code = """
-            public class Test {
-                private int a;
-                private String b;
-                private Object c;
-            }
-        """;
+                    public class Test {
+                        private int a;
+                        private String b;
+                        private Object c;
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -42,13 +42,13 @@ class InstanceVarCountRuleTest {
     @DisplayName("static 변수(클래스 변수)는 개수에 포함하지 않는다.")
     void check_ignoresStaticFields() {
         String code = """
-            public class Test {
-                private int a;
-                private String b;
-                private static final int MAX_COUNT = 10;
-                private static Object instance;
-            }
-        """;
+                    public class Test {
+                        private int a;
+                        private String b;
+                        private static final int MAX_COUNT = 10;
+                        private static Object instance;
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();
@@ -58,11 +58,11 @@ class InstanceVarCountRuleTest {
     @DisplayName("한 줄에 여러 변수가 선언된 경우(int a, b;) 모두 카운트한다.")
     void check_countsMultiVariableDeclarations() {
         String code = """
-            public class Test {
-                private int a, b;
-                private String c;
-            }
-        """;
+                    public class Test {
+                        private int a, b;
+                        private String c;
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);

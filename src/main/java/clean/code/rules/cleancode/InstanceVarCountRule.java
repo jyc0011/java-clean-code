@@ -60,7 +60,8 @@ public class InstanceVarCountRule implements Rule {
                         "클래스에 인스턴스 변수가 %d개입니다. (허용 기준: %d개).",
                         instanceVarCount, maxCount
                 );
-                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, message, severity));
+                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, message,
+                        severity));
             }
         }
     }

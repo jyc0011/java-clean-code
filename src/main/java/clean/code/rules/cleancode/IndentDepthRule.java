@@ -64,7 +64,8 @@ public class IndentDepthRule implements Rule {
         public void visit(MethodDeclaration n, List<Violation> collector) {
             n.getBody().ifPresent(body -> {
                 int baseIndent = n.getRange().map(r -> r.begin.column).orElse(0);
-                StatementVisitor statementVisitor = new StatementVisitor(filePath, maxDepth, indentSize, baseIndent, severity);
+                StatementVisitor statementVisitor = new StatementVisitor(filePath, maxDepth, indentSize, baseIndent,
+                        severity);
                 body.accept(statementVisitor, collector);
             });
         }

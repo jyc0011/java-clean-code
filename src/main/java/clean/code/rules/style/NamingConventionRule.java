@@ -17,11 +17,10 @@ import java.util.regex.Pattern;
 public class NamingConventionRule implements Rule {
 
     private static final String RULE_ID = "NamingConvention";
-    private final Severity severity;
-
     private static final Pattern UPPER_CAMEL_CASE = Pattern.compile("^[A-Z][A-Za-z0-9]*$");
     private static final Pattern LOWER_CAMEL_CASE = Pattern.compile("^[a-z][A-Za-z0-9]*$");
     private static final Pattern UPPER_SNAKE_CASE = Pattern.compile("^[A-Z0-9_]+$");
+    private final Severity severity;
 
     public NamingConventionRule(Severity severity) {
         this.severity = severity;

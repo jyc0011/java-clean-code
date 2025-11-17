@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 public class ModifierOrderRule implements Rule {
 
     private static final String RULE_ID = "ModifierOrder";
-    private final Severity severity;
-
     private static final List<Modifier.Keyword> STANDARD_ORDER = List.of(
             Modifier.Keyword.PUBLIC,
             Modifier.Keyword.PROTECTED,
@@ -38,6 +36,7 @@ public class ModifierOrderRule implements Rule {
             Modifier.Keyword.NATIVE,
             Modifier.Keyword.STRICTFP
     );
+    private final Severity severity;
 
     public ModifierOrderRule(Severity severity) {
         this.severity = severity;
@@ -105,7 +104,8 @@ public class ModifierOrderRule implements Rule {
             if (!actualKeywords.equals(expectedKeywords)) {
                 int line = node.getRange().map(r -> r.begin.line).orElse(1);
                 String actual = actualKeywords.stream().map(Enum::name).collect(Collectors.joining(" ")).toLowerCase();
-                String expected = expectedKeywords.stream().map(Enum::name).collect(Collectors.joining(" ")).toLowerCase();
+                String expected = expectedKeywords.stream().map(Enum::name).collect(Collectors.joining(" "))
+                        .toLowerCase();
                 String message = String.format(
                         "제어자 순서가 표준(%s)과 다릅니다. 실제 순서: [%s], 권장 순서: [%s]",
                         "Google Style Guide 4.8.7", actual, expected

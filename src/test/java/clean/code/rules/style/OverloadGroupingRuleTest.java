@@ -22,14 +22,14 @@ class OverloadGroupingRuleTest {
     @DisplayName("오버로드된 메서드(doSomething) 사이에 필드가 끼어있는 경우 감지한다.")
     void check_detectsFieldSeparatingOverloads() {
         String code = """
-            class Test {
-                public void doSomething(String s) {}
-                
-                private int counter;
-                
-                public void doSomething(String s, int i) {}
-            }
-        """;
+                    class Test {
+                        public void doSomething(String s) {}
+                        
+                        private int counter;
+                        
+                        public void doSomething(String s, int i) {}
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -43,14 +43,14 @@ class OverloadGroupingRuleTest {
     @DisplayName("오버로드된 메서드 사이에 다른 메서드가 끼어있는 경우 감지한다.")
     void check_detectsMethodSeparatingOverloads() {
         String code = """
-            class Test {
-                public void doSomething(String s) {}
-                
-                public void otherMethod() {}
-                
-                public void doSomething(String s, int i) {}
-            }
-        """;
+                    class Test {
+                        public void doSomething(String s) {}
+                        
+                        public void otherMethod() {}
+                        
+                        public void doSomething(String s, int i) {}
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -62,14 +62,14 @@ class OverloadGroupingRuleTest {
     @DisplayName("오버로드된 생성자(Constructor) 사이에 멤버가 끼어있는 경우 감지한다.")
     void check_detectsMemberSeparatingOverloadedConstructors() {
         String code = """
-            class Test {
-                public Test() {}
-                
-                private int counter;
-                
-                public Test(String s) {}
-            }
-        """;
+                    class Test {
+                        public Test() {}
+                        
+                        private int counter;
+                        
+                        public Test(String s) {}
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -81,18 +81,18 @@ class OverloadGroupingRuleTest {
     @DisplayName("오버로드된 메서드/생성자가 잘 그룹화된 경우 통과시킨다.")
     void check_passesCorrectlyGroupedOverloads() {
         String code = """
-            class Test {
-                public Test() {}
-                public Test(String s) {}
-                
-                private int counter;
-                
-                public void doSomething(String s) {}
-                public void doSomething(String s, int i) {}
-                
-                public void otherMethod() {}
-            }
-        """;
+                    class Test {
+                        public Test() {}
+                        public Test(String s) {}
+                        
+                        private int counter;
+                        
+                        public void doSomething(String s) {}
+                        public void doSomething(String s, int i) {}
+                        
+                        public void otherMethod() {}
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();

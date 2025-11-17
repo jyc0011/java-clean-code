@@ -22,13 +22,13 @@ class FirstCollectionRuleTest {
     @DisplayName("컬렉션(List)과 다른 멤버 변수(int)를 함께 가진 클래스를 감지한다.")
     void check_detectsCollectionWithOtherField() {
         String code = """
-            import java.util.List;
-            
-            public class Numbers {
-                private List<Integer> numbers;
-                private int total;
-            }
-        """;
+                    import java.util.List;
+                    
+                    public class Numbers {
+                        private List<Integer> numbers;
+                        private int total;
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -42,13 +42,13 @@ class FirstCollectionRuleTest {
     @DisplayName("컬렉션(Map)과 다른 멤버 변수를 함께 가진 클래스를 감지한다.")
     void check_detectsCollectionWithOtherFieldMap() {
         String code = """
-            import java.util.Map;
-            
-            public class Users {
-                private Map<Long, User> users;
-                private String adminName;
-            }
-        """;
+                    import java.util.Map;
+                    
+                    public class Users {
+                        private Map<Long, User> users;
+                        private String adminName;
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -59,13 +59,13 @@ class FirstCollectionRuleTest {
     @DisplayName("컬렉션만 가진 클래스(일급 컬렉션)는 통과시킨다.")
     void check_passesFirstClassCollection() {
         String code = """
-            import java.util.List;
-            
-            public class Numbers {
-                private List<Integer> numbers;
-                private static final int DEFAULT_CAPACITY = 10;
-            }
-        """;
+                    import java.util.List;
+                    
+                    public class Numbers {
+                        private List<Integer> numbers;
+                        private static final int DEFAULT_CAPACITY = 10;
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();
@@ -75,11 +75,11 @@ class FirstCollectionRuleTest {
     @DisplayName("컬렉션이 없는 클래스는 통과시킨다.")
     void check_passesClassWithoutCollection() {
         String code = """
-            public class User {
-                private String name;
-                private int age;
-            }
-        """;
+                    public class User {
+                        private String name;
+                        private int age;
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();

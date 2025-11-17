@@ -10,11 +10,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-  [클린코드] 메서드 최대 길이 제한 규칙
- */
-import clean.code.rules.Severity;
-
 
 public class MethodLengthRule implements Rule {
 

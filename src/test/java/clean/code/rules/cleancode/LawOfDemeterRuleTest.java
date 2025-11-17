@@ -22,14 +22,14 @@ class LawOfDemeterRuleTest {
     @DisplayName("점이 2개인 메서드 호출을 감지한다 (a.b.c())")
     void check_detectsTwoDotsMethodCall() {
         String code = """
-            class Test {
-                void method(A a) {
-                    a.b.c();
-                }
-                static class A { B b; }
-                static class B { void c() {} }
-            }
-        """;
+                    class Test {
+                        void method(A a) {
+                            a.b.c();
+                        }
+                        static class A { B b; }
+                        static class B { void c() {} }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -43,14 +43,14 @@ class LawOfDemeterRuleTest {
     @DisplayName("점이 2개인 필드 접근을 감지한다 (this.a.b)")
     void check_detectsTwoDotsFieldAccess() {
         String code = """
-            class Test {
-                A a;
-                void method() {
-                    String s = this.a.b;
-                }
-                static class A { String b; }
-            }
-        """;
+                    class Test {
+                        A a;
+                        void method() {
+                            String s = this.a.b;
+                        }
+                        static class A { String b; }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -63,16 +63,16 @@ class LawOfDemeterRuleTest {
     @DisplayName("점이 1개인 호출은 통과시킨다 (a.b())")
     void check_passesOneDotCall() {
         String code = """
-            class Test {
-                void method(A a) {
-                    a.b();
-                    this.field = 1;
-                    "String".length();
-                }
-                int field;
-                static class A { void b() {} }
-            }
-        """;
+                    class Test {
+                        void method(A a) {
+                            a.b();
+                            this.field = 1;
+                            "String".length();
+                        }
+                        int field;
+                        static class A { void b() {} }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();

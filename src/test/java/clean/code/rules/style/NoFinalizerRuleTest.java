@@ -22,13 +22,13 @@ class NoFinalizerRuleTest {
     @DisplayName("Object.finalize() 메서드 오버라이드를 감지한다.")
     void check_detectsFinalizeOverride() {
         String code = """
-            class Test {
-                @Override
-                protected void finalize() throws Throwable {
-                    super.finalize();
-                }
-            }
-        """;
+                    class Test {
+                        @Override
+                        protected void finalize() throws Throwable {
+                            super.finalize();
+                        }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
@@ -42,11 +42,11 @@ class NoFinalizerRuleTest {
     @DisplayName("이름만 같고 파라미터가 다른 'finalize' 메서드는 무시한다.")
     void check_ignoresOverloadedFinalize() {
         String code = """
-            class Test {
-                public void finalize(boolean force) { 
-                }
-            }
-        """;
+                    class Test {
+                        public void finalize(boolean force) { 
+                        }
+                    }
+                """;
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).isEmpty();
