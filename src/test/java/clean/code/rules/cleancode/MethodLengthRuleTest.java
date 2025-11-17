@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import java.nio.file.Path;
@@ -19,7 +20,7 @@ class MethodLengthRuleTest {
     @Test
     @DisplayName("허용된 최대 길이를 초과하는 메서드를 감지한다.")
     void check_detectsMethodLongerThanMax() {
-        Rule methodLengthRule = new MethodLengthRule(10);
+        Rule methodLengthRule = new MethodLengthRule(10, Severity.HIGH);
         String code = """
                     class Test {
                         void longMethod() { // line 2
@@ -48,7 +49,7 @@ class MethodLengthRuleTest {
     @DisplayName("허용된 최대 길이 이내의 메서드는 통과시킨다.")
     void check_passesMethodWithinLimit() {
         // Given
-        Rule methodLengthRule = new MethodLengthRule(15);
+        Rule methodLengthRule = new MethodLengthRule(15, Severity.HIGH);
         String code = """
                     class Test {
                         void shortMethod() {

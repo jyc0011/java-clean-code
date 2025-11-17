@@ -2,6 +2,7 @@ package clean.code.rules.cleancode;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -19,19 +20,31 @@ public class NoHardcodingRule implements Rule {
 
     private static final String RULE_ID = "NoHardcoding";
     private static final Set<String> ALLOWED_NUMBERS = Set.of("0", "1", "-1");
+    private final Severity severity;
+
+    public NoHardcodingRule(Severity severity) {
+        this.severity = severity;
+    }
+
+    @Override
+    public Severity getSeverity() {
+        return this.severity;
+    }
 
     @Override
     public List<Violation> check(Path filePath, CompilationUnit ast) {
         List<Violation> violations = new ArrayList<>();
-        ast.accept(new HardcodingVisitor(filePath), violations);
+        ast.accept(new HardcodingVisitor(filePath, severity), violations);
         return violations;
     }
 
     private static class HardcodingVisitor extends VoidVisitorAdapter<List<Violation>> {
         private final Path filePath;
+        private final Severity severity;
 
-        public HardcodingVisitor(Path filePath) {
+        public HardcodingVisitor(Path filePath, Severity severity) {
             this.filePath = filePath;
+            this.severity = severity;
         }
 
         @Override
@@ -53,7 +66,8 @@ public class NoHardcodingRule implements Rule {
         private boolean isConstantOrAnnotation(Node node) {
             Node parent = node.getParentNode().orElse(null);
             while (parent != null) {
-                if (parent instanceof FieldDeclaration field) {
+                if (parent instanceof FieldDeclaration) {
+                    FieldDeclaration field = (FieldDeclaration) parent;
                     if (field.isStatic() && field.isFinal()) {
                         return true;
                     }
@@ -72,7 +86,7 @@ public class NoHardcodingRule implements Rule {
                     "하드코딩된 값(%s)이 있습니다. 'static final' 상수로 분리하세요.",
                     value
             );
-            collector.add(new Violation(filePath, line, RULE_ID, message));
+            collector.add(new Violation(filePath, line, RULE_ID, message, severity));
         }
     }
 }

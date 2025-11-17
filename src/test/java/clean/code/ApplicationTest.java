@@ -114,9 +114,9 @@ class ApplicationTest {
         String consoleOutput = getConsoleOutput();
         assertThat(consoleOutput).contains("[FAIL] Found 2 violations in 2 files!");
         assertThat(consoleOutput)
-                .contains("BadCode.java:5 [NoElse]");
+                .contains("🟠 BadCode.java:5 [NoElse]");
         assertThat(consoleOutput)
-                .contains("LongMethod.java:4 [MethodLength]")
+                .contains("🔴 LongMethod.java:4 [MethodLength]")
                 .contains("메서드 길이가 22라인입니다. (허용 기준: 20라인)");
         assertThat(consoleOutput).doesNotContain("NoHardcoding");
     }

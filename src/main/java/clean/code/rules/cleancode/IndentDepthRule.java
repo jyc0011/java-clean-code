@@ -2,6 +2,7 @@ package clean.code.rules.cleancode;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -26,16 +27,23 @@ public class IndentDepthRule implements Rule {
     private static final String RULE_ID = "IndentDepth";
     private final int maxDepth;
     private final int indentSize;
+    private final Severity severity;
 
-    public IndentDepthRule(int maxDepth, int indentSize) {
+    public IndentDepthRule(int maxDepth, int indentSize, Severity severity) {
         this.maxDepth = maxDepth;
         this.indentSize = indentSize;
+        this.severity = severity;
+    }
+
+    @Override
+    public Severity getSeverity() {
+        return this.severity;
     }
 
     @Override
     public List<Violation> check(Path filePath, CompilationUnit ast) {
         List<Violation> violations = new ArrayList<>();
-        ast.accept(new MethodVisitor(filePath, maxDepth, indentSize), violations);
+        ast.accept(new MethodVisitor(filePath, maxDepth, indentSize, severity), violations);
         return violations;
     }
 
@@ -43,18 +51,20 @@ public class IndentDepthRule implements Rule {
         private final Path filePath;
         private final int maxDepth;
         private final int indentSize;
+        private final Severity severity;
 
-        public MethodVisitor(Path filePath, int maxDepth, int indentSize) {
+        public MethodVisitor(Path filePath, int maxDepth, int indentSize, Severity severity) {
             this.filePath = filePath;
             this.maxDepth = maxDepth;
             this.indentSize = indentSize;
+            this.severity = severity;
         }
 
         @Override
         public void visit(MethodDeclaration n, List<Violation> collector) {
             n.getBody().ifPresent(body -> {
                 int baseIndent = n.getRange().map(r -> r.begin.column).orElse(0);
-                StatementVisitor statementVisitor = new StatementVisitor(filePath, maxDepth, indentSize, baseIndent);
+                StatementVisitor statementVisitor = new StatementVisitor(filePath, maxDepth, indentSize, baseIndent, severity);
                 body.accept(statementVisitor, collector);
             });
         }
@@ -65,12 +75,14 @@ public class IndentDepthRule implements Rule {
         private final int maxDepth;
         private final int indentSize;
         private final int baseIndent;
+        private final Severity severity;
 
-        public StatementVisitor(Path filePath, int maxDepth, int indentSize, int baseIndent) {
+        public StatementVisitor(Path filePath, int maxDepth, int indentSize, int baseIndent, Severity severity) {
             this.filePath = filePath;
             this.maxDepth = maxDepth;
             this.indentSize = indentSize;
             this.baseIndent = baseIndent;
+            this.severity = severity;
         }
 
         @Override
@@ -132,7 +144,7 @@ public class IndentDepthRule implements Rule {
                         "들여쓰기 깊이가 %d입니다. (허용 기준: %d). 메서드 분리를 고려하세요.",
                         depth, maxDepth
                 );
-                collector.add(new Violation(filePath, line, RULE_ID, message));
+                collector.add(new Violation(filePath, line, RULE_ID, message, severity));
             }
         }
     }

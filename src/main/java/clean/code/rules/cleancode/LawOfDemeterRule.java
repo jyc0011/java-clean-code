@@ -2,6 +2,7 @@ package clean.code.rules.cleancode;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
@@ -19,25 +20,34 @@ public class LawOfDemeterRule implements Rule {
 
     private static final String RULE_ID = "LawOfDemeter";
     private final int maxDots;
+    private final Severity severity;
 
-    public LawOfDemeterRule(int maxDots) {
+    public LawOfDemeterRule(int maxDots, Severity severity) {
         this.maxDots = maxDots;
+        this.severity = severity;
+    }
+
+    @Override
+    public Severity getSeverity() {
+        return this.severity;
     }
 
     @Override
     public List<Violation> check(Path filePath, CompilationUnit ast) {
         List<Violation> violations = new ArrayList<>();
-        ast.accept(new DotVisitor(filePath, maxDots), violations);
+        ast.accept(new DotVisitor(filePath, maxDots, severity), violations);
         return violations;
     }
 
     private static class DotVisitor extends VoidVisitorAdapter<List<Violation>> {
         private final Path filePath;
         private final int maxDots;
+        private final Severity severity;
 
-        public DotVisitor(Path filePath, int maxDots) {
+        public DotVisitor(Path filePath, int maxDots, Severity severity) {
             this.filePath = filePath;
             this.maxDots = maxDots;
+            this.severity = severity;
         }
 
         @Override
@@ -56,10 +66,8 @@ public class LawOfDemeterRule implements Rule {
             int dotCount = 0;
             Expression currentScope = scope;
 
-            // 'a.b.c' -> scope는 'a.b'
             while (currentScope != null) {
                 dotCount++;
-
                 if (currentScope instanceof MethodCallExpr) {
                     currentScope = ((MethodCallExpr) currentScope).getScope().orElse(null);
                 } else if (currentScope instanceof FieldAccessExpr) {
@@ -75,7 +83,7 @@ public class LawOfDemeterRule implements Rule {
                         "한 줄에 점(.)이 %d개 사용되었습니다. (허용 기준: %d개). 디미터 법칙 위반 가능성이 있습니다.",
                         dotCount, maxDots
                 );
-                collector.add(new Violation(filePath, line, RULE_ID, message));
+                collector.add(new Violation(filePath, line, RULE_ID, message, severity));
             }
         }
     }

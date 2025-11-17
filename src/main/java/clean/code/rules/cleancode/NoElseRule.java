@@ -2,6 +2,7 @@ package clean.code.rules.cleancode;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
@@ -18,11 +19,21 @@ public class NoElseRule implements Rule {
 
     private static final String RULE_ID = "NoElse";
     private static final String MESSAGE = "The 'else' keyword is discouraged. Use early returns (guard clauses) instead.";
+    private final Severity severity;
+
+    public NoElseRule(Severity severity) {
+        this.severity = severity;
+    }
+
+    @Override
+    public Severity getSeverity() {
+        return this.severity;
+    }
 
     @Override
     public List<Violation> check(Path filePath, CompilationUnit ast) {
         List<Violation> violations = new ArrayList<>();
-        ast.accept(new IfStmtVisitor(filePath), violations);
+        ast.accept(new IfStmtVisitor(filePath, severity), violations);
         return violations;
     }
 
@@ -32,9 +43,11 @@ public class NoElseRule implements Rule {
     private static class IfStmtVisitor extends VoidVisitorAdapter<List<Violation>> {
 
         private final Path filePath;
+        private final Severity severity;
 
-        public IfStmtVisitor(Path filePath) {
+        public IfStmtVisitor(Path filePath, Severity severity) {
             this.filePath = filePath;
+            this.severity = severity;
         }
 
         @Override
@@ -46,7 +59,7 @@ public class NoElseRule implements Rule {
                 int line = elseStatement.getRange()
                         .map(r -> r.begin.line)
                         .orElse(-1);
-                collector.add(new Violation(filePath, line, RULE_ID, MESSAGE));
+                collector.add(new Violation(filePath, line, RULE_ID, MESSAGE, severity));
             }
         }
     }

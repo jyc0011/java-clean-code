@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import java.nio.file.Path;
@@ -20,7 +21,7 @@ class NoElseRuleTest {
 
     @BeforeEach
     void setUp() {
-        noElseRule = new NoElseRule();
+        noElseRule = new NoElseRule(Severity.MEDIUM);
     }
 
     @Test
@@ -41,8 +42,9 @@ class NoElseRuleTest {
         List<Violation> violations = noElseRule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
         Violation violation = violations.getFirst();
-        assertThat(violation.line()).isEqualTo(5); // 'else' 키워드의 라인
+        assertThat(violation.line()).isEqualTo(5);
         assertThat(violation.ruleId()).isEqualTo("NoElse");
+        assertThat(violation.severity()).isEqualTo(Severity.MEDIUM);
     }
 
     @Test
@@ -63,6 +65,7 @@ class NoElseRuleTest {
         List<Violation> violations = noElseRule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
         assertThat(violations.getFirst().line()).isEqualTo(5);
+        assertThat(violations.getFirst().severity()).isEqualTo(Severity.MEDIUM);
     }
 
     @Test

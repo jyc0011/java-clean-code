@@ -2,6 +2,7 @@ package clean.code.report;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import clean.code.rules.Severity;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.file.Path;
@@ -44,9 +45,9 @@ class ConsoleReporterTest {
         Path fileB = Paths.get("src/main/Member.java");
 
         List<Violation> violations = List.of(
-                new Violation(fileA, 10, "MethodLength", "메서드 길이 15 초과"), // A
-                new Violation(fileB, 20, "NoElse", "else 사용"), // B
-                new Violation(fileA, 45, "NoHardcoding", "하드코딩된 문자열") // A (두 번째)
+                new Violation(fileA, 10, "MethodLength", "메서드 길이 15 초과", Severity.HIGH),
+                new Violation(fileB, 20, "NoElse", "else 사용", Severity.MEDIUM),
+                new Violation(fileA, 45, "NoHardcoding", "하드코딩된 문자열", Severity.MEDIUM)
         );
 
         consoleReporter.report(violations);
@@ -54,12 +55,12 @@ class ConsoleReporterTest {
         String expectedOutput = """
                 [FAIL] Found 3 violations in 2 files!
 
-                🔴 Member.java:20 [NoElse]
+                🟠 Member.java:20 [NoElse]
                    - else 사용
 
                 🔴 Order.java:10 [MethodLength]
                    - 메서드 길이 15 초과
-                🔴 Order.java:45 [NoHardcoding]
+                🟠 Order.java:45 [NoHardcoding]
                    - 하드코딩된 문자열""";
 
         assertThat(output).isEqualTo(expectedOutput.replace("\r\n", "\n"));

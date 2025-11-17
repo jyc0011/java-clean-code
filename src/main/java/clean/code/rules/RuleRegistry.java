@@ -1,5 +1,7 @@
 package clean.code.rules;
 
+import clean.code.config.AppRuleConfig;
+import clean.code.config.RuleConfig;
 import clean.code.rules.cleancode.IndentDepthRule;
 import clean.code.rules.cleancode.InstanceVarCountRule;
 import clean.code.rules.cleancode.LawOfDemeterRule;
@@ -16,12 +18,13 @@ import clean.code.rules.style.NamingConventionRule;
 import clean.code.rules.style.NoFinalizerRule;
 import clean.code.rules.style.NoWildcardImportRule;
 import clean.code.rules.style.OverloadGroupingRule;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-/**
- * 활성화된 규칙들을 생성하고 관리(등록)합니다. 향후 config 파일(미구현)을 읽어 규칙을 On/Off하거나, 임계값(예: 메서드 길이 10)을 설정하는 로직이 추가될 수 있습니다.
- */
 public class RuleRegistry {
+
+    // --- 하드코딩된 기본값 (JSON 설정이 없을 때 사용) ---
     private static final int DEFAULT_METHOD_LENGTH_LIMIT = 15;
     private static final int DEFAULT_INSTANCE_VAR_COUNT = 2;
     private static final int DEFAULT_METHOD_PARAM_COUNT = 3;
@@ -30,27 +33,54 @@ public class RuleRegistry {
     private static final int DEFAULT_INDENT_SIZE = 4;
     private static final int DEFAULT_PRIMITIVE_WRAP_COUNT = 2;
 
-    /**
-     * 현재 활성화된 모든 규칙의 인스턴스를 반환합니다.
-     */
+    private final AppRuleConfig config;
+
+    public RuleRegistry(AppRuleConfig config) {
+        this.config = config;
+    }
+
     public List<Rule> getActiveRules() {
-        return List.of(
-                new NoElseRule(),
-                new MethodLengthRule(DEFAULT_METHOD_LENGTH_LIMIT),
-                new InstanceVarCountRule(DEFAULT_INSTANCE_VAR_COUNT),
-                new MethodParameterRule(DEFAULT_METHOD_PARAM_COUNT),
-                new NoHardcodingRule(),
-                new LawOfDemeterRule(DEFAULT_DOT_COUNT),
-                new IndentDepthRule(DEFAULT_INDENT_DEPTH, DEFAULT_INDENT_SIZE),
-                new NoWildcardImportRule(),
-                new NoFinalizerRule(),
-                new ModifierOrderRule(),
-                new ImportOrderRule(),
-                new NamingConventionRule(),
-                new OverloadGroupingRule(),
-                new NoDataClassRule(),
-                new WrapPrimitiveRule(DEFAULT_PRIMITIVE_WRAP_COUNT),
-                new FirstCollectionRule()
-        );
+        List<Rule> activeRules = new ArrayList<>();
+        addRuleIfEnabled(activeRules, "IndentDepth",      (c) -> new IndentDepthRule(c.max(DEFAULT_INDENT_DEPTH), DEFAULT_INDENT_SIZE, Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "InstanceVarCount", (c) -> new InstanceVarCountRule(c.max(DEFAULT_INSTANCE_VAR_COUNT), Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "MethodLength",     (c) -> new MethodLengthRule(c.max(DEFAULT_METHOD_LENGTH_LIMIT), Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "MethodParameter",  (c) -> new MethodParameterRule(c.max(DEFAULT_METHOD_PARAM_COUNT), Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "NoElse",           () -> new NoElseRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "LawOfDemeter",     (c) -> new LawOfDemeterRule(c.max(DEFAULT_DOT_COUNT), Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "NoHardcoding",     () -> new NoHardcodingRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "NamingConvention", () -> new NamingConventionRule(Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "NoWildcardImport", () -> new NoWildcardImportRule(Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "ImportOrder",      () -> new ImportOrderRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "ModifierOrder",    () -> new ModifierOrderRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "NoFinalizer",      () -> new NoFinalizerRule(Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "OverloadGrouping", () -> new OverloadGroupingRule(Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "NoDataClass",     () -> new NoDataClassRule(Severity.HIGH)); // 🔴
+        addRuleIfEnabled(activeRules, "WrapPrimitive",   (c) -> new WrapPrimitiveRule(c.max(DEFAULT_PRIMITIVE_WRAP_COUNT), Severity.MEDIUM)); // 🟠
+        addRuleIfEnabled(activeRules, "FirstCollection", () -> new FirstCollectionRule(Severity.MEDIUM)); // 🟠
+
+        return activeRules;
+    }
+
+    // --- 헬퍼 메서드 ---
+
+    // 임계값이 없는 규칙 (on/off만)
+    private void addRuleIfEnabled(List<Rule> list, String ruleId, java.util.function.Supplier<Rule> supplier) {
+        if (config.getRuleConfig(ruleId).isEnabled()) {
+            list.add(supplier.get());
+        }
+    }
+
+    private void addRuleIfEnabled(List<Rule> list, String ruleId,
+                                  java.util.function.Function<ConfigWrapper, Rule> function) {
+        RuleConfig ruleConfig = config.getRuleConfig(ruleId);
+        if (ruleConfig.isEnabled()) {
+            list.add(function.apply(new ConfigWrapper(ruleConfig)));
+        }
+    }
+
+    private record ConfigWrapper(RuleConfig config) {
+        int max(int defaultValue) {
+            return Optional.ofNullable(config.max()).orElse(defaultValue);
+        }
     }
 }

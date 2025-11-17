@@ -24,7 +24,9 @@ public class ConsoleReporter {
                 totalViolations, filesWithViolations);
         groupedViolations.forEach((path, violationList) -> {
             for (Violation v : violationList) {
-                System.out.printf("🔴 %s:%d [%s]%n",
+                String icon = v.severity().getIcon();
+                System.out.printf("%s %s:%d [%s]%n",
+                        icon,
                         path.getFileName(), v.line(), v.ruleId());
                 System.out.printf("   - %s%n", v.message());
             }

@@ -2,6 +2,7 @@ package clean.code.rules.style;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import java.nio.file.Path;
@@ -14,12 +15,21 @@ import java.util.List;
 public class ImportOrderRule implements Rule {
 
     private static final String RULE_ID = "ImportOrder";
+    private final Severity severity;
+
+    public ImportOrderRule(Severity severity) {
+        this.severity = severity;
+    }
+
+    @Override
+    public Severity getSeverity() {
+        return this.severity;
+    }
 
     @Override
     public List<Violation> check(Path filePath, CompilationUnit ast) {
         List<Violation> violations = new ArrayList<>();
         List<ImportDeclaration> imports = ast.getImports();
-
         if (imports.isEmpty()) {
             return violations;
         }
@@ -35,14 +45,12 @@ public class ImportOrderRule implements Rule {
             if (imp.isStatic()) {
                 if (hasEncounteredNonStatic) {
                     violations.add(new Violation(filePath, line, RULE_ID,
-                            "static 임포트는 non-static 임포트보다 먼저 와야 합니다."));
+                            "static 임포트는 non-static 임포트보다 먼저 와야 합니다.", severity));
                 }
-
                 if (importName.compareTo(lastStaticImport) < 0) {
                     violations.add(createAsciiOrderViolation(filePath, line, importName, lastStaticImport));
                 }
                 lastStaticImport = importName;
-
             } else {
                 hasEncounteredNonStatic = true;
                 if (importName.compareTo(lastNonStaticImport) < 0) {
@@ -59,6 +67,6 @@ public class ImportOrderRule implements Rule {
                 "임포트 순서가 ASCII 정렬과 다릅니다. '%s'는 '%s'보다 앞에 와야 합니다.",
                 current, previous
         );
-        return new Violation(filePath, line, RULE_ID, message);
+        return new Violation(filePath, line, RULE_ID, message, severity);
     }
 }

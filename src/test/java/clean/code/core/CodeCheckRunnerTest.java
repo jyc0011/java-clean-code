@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import clean.code.report.ConsoleReporter;
 import clean.code.report.Violation;
+import clean.code.rules.Severity;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -22,7 +23,7 @@ class CodeCheckRunnerTest {
     private final Path TEST_PATH = Paths.get("fake/path");
     private final List<Path> FAKE_FILES = List.of(TEST_PATH.resolve("File.java"));
     private final List<Violation> FAKE_VIOLATIONS = List.of(
-            new Violation(FAKE_FILES.getFirst(), 10, "TestRule", "Test violation")
+            new Violation(FAKE_FILES.getFirst(), 10, "TestRule", "Test violation", Severity.HIGH)
     );
     @Mock
     private ProjectScanner mockScanner;

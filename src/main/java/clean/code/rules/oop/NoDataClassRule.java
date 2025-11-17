@@ -2,6 +2,7 @@ package clean.code.rules.oop;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -18,39 +19,50 @@ public class NoDataClassRule implements Rule {
 
     private static final String RULE_ID = "NoDataClass";
     private static final String MESSAGE = "클래스가 데이터와 Getter/Setter만 가지고 있습니다. " +
-            "핵심 도메인 객체라면, 객체의 상태를 변경하는 '의도'가 드러나는 메서드를 추가하세요.";
+                                          "핵심 도메인 객체라면, 객체의 상태를 변경하는 '의도'가 드러나는 메서드를 추가하세요.";
+    private final Severity severity;
+
+    public NoDataClassRule(Severity severity) {
+        this.severity = severity;
+    }
+
+    @Override
+    public Severity getSeverity() {
+        return this.severity;
+    }
 
     @Override
     public List<Violation> check(Path filePath, CompilationUnit ast) {
         List<Violation> violations = new ArrayList<>();
-        ast.accept(new DataClassVisitor(filePath), violations);
+        ast.accept(new DataClassVisitor(filePath, severity), violations);
         return violations;
     }
 
     private static class DataClassVisitor extends VoidVisitorAdapter<List<Violation>> {
         private final Path filePath;
+        private final Severity severity;
 
-        public DataClassVisitor(Path filePath) {
+        public DataClassVisitor(Path filePath, Severity severity) {
             this.filePath = filePath;
+            this.severity = severity;
         }
 
         @Override
         public void visit(ClassOrInterfaceDeclaration n, List<Violation> collector) {
             super.visit(n, collector);
-
             if (n.isInterface() || n.isRecordDeclaration() || n.isEnumDeclaration() ||
-                    n.getNameAsString().endsWith("DTO")) {
+                n.getNameAsString().endsWith("DTO")) {
                 return;
             }
             boolean hasFields = !n.getFields().isEmpty();
             boolean hasOnlyGettersSettersConstructors = true;
+
             for (BodyDeclaration<?> member : n.getMembers()) {
-                if (member.isFieldDeclaration() || member.isConstructorDeclaration()
-                        || member.isInitializerDeclaration()) {
+                if (member.isFieldDeclaration() || member.isConstructorDeclaration() || member.isInitializerDeclaration()) {
                     continue;
                 }
-
-                if (member instanceof MethodDeclaration md) {
+                if (member instanceof MethodDeclaration) {
+                    MethodDeclaration md = (MethodDeclaration) member;
                     if (!isGetter(md) && !isSetter(md)) {
                         hasOnlyGettersSettersConstructors = false;
                         break;
@@ -59,7 +71,7 @@ public class NoDataClassRule implements Rule {
             }
 
             if (hasFields && hasOnlyGettersSettersConstructors) {
-                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, MESSAGE));
+                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, MESSAGE, severity));
             }
         }
 
@@ -72,8 +84,11 @@ public class NoDataClassRule implements Rule {
                 return true;
             }
             String typeName = md.getType().asString();
-            return name.startsWith("is") && name.length() > 2 && Character.isUpperCase(name.charAt(2)) &&
-                    (typeName.equals("boolean") || typeName.equals("Boolean"));
+            if (name.startsWith("is") && name.length() > 2 && Character.isUpperCase(name.charAt(2)) &&
+                (typeName.equals("boolean") || typeName.equals("Boolean"))) {
+                return true;
+            }
+            return false;
         }
 
         private boolean isSetter(MethodDeclaration md) {

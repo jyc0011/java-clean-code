@@ -2,6 +2,7 @@ package clean.code.rules.oop;
 
 import clean.code.report.Violation;
 import clean.code.rules.Rule;
+import clean.code.rules.Severity;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -19,22 +20,35 @@ public class FirstCollectionRule implements Rule {
 
     private static final String RULE_ID = "FirstCollection";
     private static final String MESSAGE = "일급 컬렉션(Collection)을 포함한 클래스는 다른 멤버 변수를 가질 수 없습니다.";
+    private final Severity severity;
+
     private static final Set<String> COLLECTION_TYPES = Set.of(
             "Collection", "List", "Set", "Queue", "Deque", "Map"
     );
 
+    public FirstCollectionRule(Severity severity) {
+        this.severity = severity;
+    }
+
+    @Override
+    public Severity getSeverity() {
+        return this.severity;
+    }
+
     @Override
     public List<Violation> check(Path filePath, CompilationUnit ast) {
         List<Violation> violations = new ArrayList<>();
-        ast.accept(new FirstCollectionVisitor(filePath), violations);
+        ast.accept(new FirstCollectionVisitor(filePath, severity), violations);
         return violations;
     }
 
     private static class FirstCollectionVisitor extends VoidVisitorAdapter<List<Violation>> {
         private final Path filePath;
+        private final Severity severity;
 
-        public FirstCollectionVisitor(Path filePath) {
+        public FirstCollectionVisitor(Path filePath, Severity severity) {
             this.filePath = filePath;
+            this.severity = severity;
         }
 
         @Override
@@ -43,8 +57,10 @@ public class FirstCollectionRule implements Rule {
             if (n.isInterface() || n.isRecordDeclaration() || n.isEnumDeclaration()) {
                 return;
             }
+
             List<FieldDeclaration> instanceFields = new ArrayList<>();
             boolean hasCollection = false;
+
             for (FieldDeclaration field : n.getFields()) {
                 if (field.isStatic() && field.isFinal()) {
                     continue;
@@ -54,17 +70,15 @@ public class FirstCollectionRule implements Rule {
                     hasCollection = true;
                 }
             }
+
             if (hasCollection && instanceFields.size() > 1) {
-                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, MESSAGE));
+                collector.add(new Violation(filePath, n.getRange().map(r -> r.begin.line).orElse(1), RULE_ID, MESSAGE, severity));
             }
         }
 
-        /**
-         * 필드의 타입이 Collection 또는 Map인지 확인
-         */
         private boolean isCollectionType(FieldDeclaration field) {
             return field.getElementType().isClassOrInterfaceType() &&
-                    COLLECTION_TYPES.contains(((ClassOrInterfaceType) field.getElementType()).getNameAsString());
+                   COLLECTION_TYPES.contains(((ClassOrInterfaceType) field.getElementType()).getNameAsString());
         }
     }
 }
