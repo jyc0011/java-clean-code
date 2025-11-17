@@ -31,8 +31,8 @@ class NoFinalizerRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(3);
-        assertThat(violations.get(0).ruleId()).isEqualTo("NoFinalizer");
+        assertThat(violations.getFirst().line()).isEqualTo(3);
+        assertThat(violations.getFirst().ruleId()).isEqualTo("NoFinalizer");
     }
 
     @Test

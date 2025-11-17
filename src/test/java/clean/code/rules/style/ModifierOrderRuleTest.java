@@ -29,9 +29,9 @@ class ModifierOrderRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(3);
-        assertThat(violations.get(0).ruleId()).isEqualTo("ModifierOrder");
-        assertThat(violations.get(0).message()).contains("static public final")
+        assertThat(violations.getFirst().line()).isEqualTo(3);
+        assertThat(violations.getFirst().ruleId()).isEqualTo("ModifierOrder");
+        assertThat(violations.getFirst().message()).contains("static public final")
                 .contains("public static final");
     }
 
@@ -47,7 +47,7 @@ class ModifierOrderRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(3);
+        assertThat(violations.getFirst().line()).isEqualTo(3);
     }
 
     @Test

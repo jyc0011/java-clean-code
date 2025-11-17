@@ -36,8 +36,8 @@ class IndentDepthRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(5); // while문
-        assertThat(violations.get(0).message()).contains("들여쓰기 깊이가 3입니다. (허용 기준: 2)");
+        assertThat(violations.getFirst().line()).isEqualTo(5); // while문
+        assertThat(violations.getFirst().message()).contains("들여쓰기 깊이가 3입니다. (허용 기준: 2)");
     }
 
     @Test

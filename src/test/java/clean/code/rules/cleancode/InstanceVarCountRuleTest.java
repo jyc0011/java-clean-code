@@ -35,7 +35,7 @@ class InstanceVarCountRuleTest {
 
         // Then
         assertThat(violations).hasSize(1);
-        Violation v = violations.get(0);
+        Violation v = violations.getFirst();
         assertThat(v.line()).isEqualTo(1);
         assertThat(v.ruleId()).isEqualTo("InstanceVarCount");
         assertThat(v.message()).contains("인스턴스 변수가 3개입니다. (허용 기준: 2개)");
@@ -79,6 +79,6 @@ class InstanceVarCountRuleTest {
 
         // Then
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(1);
+        assertThat(violations.getFirst().line()).isEqualTo(1);
     }
 }

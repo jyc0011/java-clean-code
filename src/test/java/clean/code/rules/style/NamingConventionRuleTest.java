@@ -24,8 +24,8 @@ class NamingConventionRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(1);
-        assertThat(violations.get(0).message()).contains("UpperCamelCase");
+        assertThat(violations.getFirst().line()).isEqualTo(1);
+        assertThat(violations.getFirst().message()).contains("UpperCamelCase");
     }
 
     @Test
@@ -35,8 +35,8 @@ class NamingConventionRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(1);
-        assertThat(violations.get(0).message()).contains("lowerCamelCase");
+        assertThat(violations.getFirst().line()).isEqualTo(1);
+        assertThat(violations.getFirst().message()).contains("lowerCamelCase");
     }
 
     @Test
@@ -46,8 +46,8 @@ class NamingConventionRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(1);
-        assertThat(violations.get(0).message()).contains("UPPER_SNAKE_CASE");
+        assertThat(violations.getFirst().line()).isEqualTo(1);
+        assertThat(violations.getFirst().message()).contains("UPPER_SNAKE_CASE");
     }
 
     @Test
@@ -57,8 +57,8 @@ class NamingConventionRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(1);
-        assertThat(violations.get(0).message()).contains("lowerCamelCase");
+        assertThat(violations.getFirst().line()).isEqualTo(1);
+        assertThat(violations.getFirst().message()).contains("lowerCamelCase");
     }
 
     @Test

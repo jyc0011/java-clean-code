@@ -36,9 +36,9 @@ class NoDataClassRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(1);
-        assertThat(violations.get(0).ruleId()).isEqualTo("NoDataClass");
-        assertThat(violations.get(0).message()).contains("Getter/Setter만 가지고 있습니다.");
+        assertThat(violations.getFirst().line()).isEqualTo(1);
+        assertThat(violations.getFirst().ruleId()).isEqualTo("NoDataClass");
+        assertThat(violations.getFirst().message()).contains("Getter/Setter만 가지고 있습니다.");
     }
 
     @Test

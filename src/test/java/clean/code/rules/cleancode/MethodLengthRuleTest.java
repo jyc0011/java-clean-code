@@ -38,7 +38,7 @@ class MethodLengthRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = methodLengthRule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        Violation v = violations.get(0);
+        Violation v = violations.getFirst();
         assertThat(v.line()).isEqualTo(2);
         assertThat(v.ruleId()).isEqualTo("MethodLength");
         assertThat(v.message()).contains("메서드 길이가 11라인입니다. (허용 기준: 10라인)");

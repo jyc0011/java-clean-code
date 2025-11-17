@@ -29,8 +29,8 @@ class MethodParameterRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(2);
-        assertThat(violations.get(0).message()).contains("4개입니다. (허용 기준: 3개)");
+        assertThat(violations.getFirst().line()).isEqualTo(2);
+        assertThat(violations.getFirst().message()).contains("4개입니다. (허용 기준: 3개)");
     }
 
     @Test
@@ -45,7 +45,7 @@ class MethodParameterRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(2);
+        assertThat(violations.getFirst().line()).isEqualTo(2);
     }
 
     @Test

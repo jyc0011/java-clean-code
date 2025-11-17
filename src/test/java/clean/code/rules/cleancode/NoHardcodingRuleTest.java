@@ -32,9 +32,9 @@ class NoHardcodingRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(3);
-        assertThat(violations.get(0).ruleId()).isEqualTo("NoHardcoding");
-        assertThat(violations.get(0).message()).contains("\"ACTIVE\"");
+        assertThat(violations.getFirst().line()).isEqualTo(3);
+        assertThat(violations.getFirst().ruleId()).isEqualTo("NoHardcoding");
+        assertThat(violations.getFirst().message()).contains("\"ACTIVE\"");
     }
 
     @Test
@@ -50,8 +50,8 @@ class NoHardcodingRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(3);
-        assertThat(violations.get(0).message()).contains("100");
+        assertThat(violations.getFirst().line()).isEqualTo(3);
+        assertThat(violations.getFirst().message()).contains("100");
     }
 
     @Test
@@ -87,6 +87,6 @@ class NoHardcodingRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(4); // 5 감지
+        assertThat(violations.getFirst().line()).isEqualTo(4); // 5 감지
     }
 }

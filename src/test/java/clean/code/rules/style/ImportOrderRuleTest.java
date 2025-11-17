@@ -29,9 +29,9 @@ class ImportOrderRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(2); // static 임포트가 잘못된 위치
-        assertThat(violations.get(0).ruleId()).isEqualTo("ImportOrder");
-        assertThat(violations.get(0).message()).contains("static 임포트는 non-static 임포트보다 먼저 와야 합니다.");
+        assertThat(violations.getFirst().line()).isEqualTo(2); // static 임포트가 잘못된 위치
+        assertThat(violations.getFirst().ruleId()).isEqualTo("ImportOrder");
+        assertThat(violations.getFirst().message()).contains("static 임포트는 non-static 임포트보다 먼저 와야 합니다.");
     }
 
     @Test
@@ -46,8 +46,8 @@ class ImportOrderRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(2);
-        assertThat(violations.get(0).message()).contains("임포트 순서가 ASCII 정렬과 다릅니다.");
+        assertThat(violations.getFirst().line()).isEqualTo(2);
+        assertThat(violations.getFirst().message()).contains("임포트 순서가 ASCII 정렬과 다릅니다.");
     }
 
     @Test
@@ -62,7 +62,7 @@ class ImportOrderRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(2);
+        assertThat(violations.getFirst().line()).isEqualTo(2);
     }
 
     @Test

@@ -22,7 +22,7 @@ class CodeCheckRunnerTest {
     private final Path TEST_PATH = Paths.get("fake/path");
     private final List<Path> FAKE_FILES = List.of(TEST_PATH.resolve("File.java"));
     private final List<Violation> FAKE_VIOLATIONS = List.of(
-            new Violation(FAKE_FILES.get(0), 10, "TestRule", "Test violation")
+            new Violation(FAKE_FILES.getFirst(), 10, "TestRule", "Test violation")
     );
     @Mock
     private ProjectScanner mockScanner;

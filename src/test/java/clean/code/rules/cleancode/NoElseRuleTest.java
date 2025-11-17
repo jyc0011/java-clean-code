@@ -40,7 +40,7 @@ class NoElseRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = noElseRule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        Violation violation = violations.get(0);
+        Violation violation = violations.getFirst();
         assertThat(violation.line()).isEqualTo(5); // 'else' 키워드의 라인
         assertThat(violation.ruleId()).isEqualTo("NoElse");
     }
@@ -62,7 +62,7 @@ class NoElseRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = noElseRule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(5);
+        assertThat(violations.getFirst().line()).isEqualTo(5);
     }
 
     @Test

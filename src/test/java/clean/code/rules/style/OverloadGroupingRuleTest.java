@@ -32,8 +32,8 @@ class OverloadGroupingRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(6); // 두 번째 doSomething
-        assertThat(violations.get(0).message()).contains("'doSomething'이(가) 이전에 나타났지만");
+        assertThat(violations.getFirst().line()).isEqualTo(6); // 두 번째 doSomething
+        assertThat(violations.getFirst().message()).contains("'doSomething'이(가) 이전에 나타났지만");
     }
 
     @Test
@@ -51,7 +51,7 @@ class OverloadGroupingRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(6);
+        assertThat(violations.getFirst().line()).isEqualTo(6);
     }
 
     @Test
@@ -70,7 +70,7 @@ class OverloadGroupingRuleTest {
         List<Violation> violations = rule.check(TEST_FILE, ast);
 
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(6);
+        assertThat(violations.getFirst().line()).isEqualTo(6);
     }
 
     @Test

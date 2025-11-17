@@ -30,9 +30,9 @@ class WrapPrimitiveRuleTest {
         CompilationUnit ast = StaticJavaParser.parse(code);
         List<Violation> violations = rule.check(TEST_FILE, ast);
         assertThat(violations).hasSize(1);
-        assertThat(violations.get(0).line()).isEqualTo(3);
-        assertThat(violations.get(0).ruleId()).isEqualTo("WrapPrimitive");
-        assertThat(violations.get(0).message()).contains("2개 있습니다.");
+        assertThat(violations.getFirst().line()).isEqualTo(3);
+        assertThat(violations.getFirst().ruleId()).isEqualTo("WrapPrimitive");
+        assertThat(violations.getFirst().message()).contains("2개 있습니다.");
     }
 
     @Test
