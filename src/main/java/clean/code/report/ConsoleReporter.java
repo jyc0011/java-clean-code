@@ -1,6 +1,10 @@
 package clean.code.report;
 
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class ConsoleReporter {
     public void report(List<Violation> violations) {
@@ -8,12 +12,23 @@ public class ConsoleReporter {
             System.out.println("[SUCCESS] No violations found!");
             return;
         }
-
-        System.out.println("[FAIL] Found " + violations.size() + " violations!");
-        // TODO: TDD 5단계 - 위반 사항 상세 출력 로직 구현
-        for (Violation v : violations) {
-            System.out.printf("🔴 %s:%d [%s]%n   - %s%n",
-                    v.filePath().getFileName(), v.line(), v.ruleId(), v.message());
-        }
+        Map<Path, List<Violation>> groupedViolations = violations.stream()
+                .collect(Collectors.groupingBy(
+                        Violation::filePath,
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
+        int totalViolations = violations.size();
+        int filesWithViolations = groupedViolations.size();
+        System.out.printf("[FAIL] Found %d violations in %d files!%n%n",
+                totalViolations, filesWithViolations);
+        groupedViolations.forEach((path, violationList) -> {
+            for (Violation v : violationList) {
+                System.out.printf("🔴 %s:%d [%s]%n",
+                        path.getFileName(), v.line(), v.ruleId());
+                System.out.printf("   - %s%n", v.message());
+            }
+            System.out.println();
+        });
     }
 }
