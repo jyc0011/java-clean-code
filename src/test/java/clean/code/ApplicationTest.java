@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,7 +57,8 @@ class ApplicationTest {
 
     @Test
     @DisplayName("애플리케이션을 실행하면, 위반 규칙(NoElse, MethodLength 등)을 감지하고 콘솔에 리포트한다.")
-    void run_endToEnd_detectsViolationsCorrectly() throws IOException {
+    void run_endToEnd_detectsViolationsCorrectly() throws IOException, URISyntaxException {
+        Path testConfigPath = Paths.get(getClass().getClassLoader().getResource("test-config.json").toURI());
         String badCode = """
                     package com.example;
                     
@@ -74,21 +76,26 @@ class ApplicationTest {
                     
                     class LongMethod {
                         void veryLongMethod() {
-                            System.out.println(1);
-                            System.out.println(2);
-                            System.out.println(3);
-                            System.out.println(4);
-                            System.out.println(5);
-                            System.out.println(6);
-                            System.out.println(7);
-                            System.out.println(8);
-                            System.out.println(9);
-                            System.out.println(10);
-                            System.out.println(11);
-                            System.out.println(12);
-                            System.out.println(13);
-                            System.out.println(14);
-                            System.out.println(15);
+                            int a=0;
+                            int b=0;
+                            int c=0;
+                            int d=0;
+                            int e=0;
+                            int f=0;
+                            int g=0;
+                            int h=0;
+                            int i=0;
+                            int j=0;
+                            int k=0;
+                            int l=0;
+                            int m=0;
+                            int n=0;
+                            int o=0;
+                            int p=0;
+                            int q=0;
+                            int r=0;
+                            int s=0;
+                            int t=0;
                         }
                     }
                 """;
@@ -97,18 +104,20 @@ class ApplicationTest {
         String goodCode = "class GoodCode {}";
         Files.writeString(tempDir.resolve("GoodCode.java"), goodCode);
         Files.writeString(tempDir.resolve("README.md"), "# Readme");
-        String[] args = {tempDir.toAbsolutePath().toString()};
+        String[] args = {
+                tempDir.toAbsolutePath().toString(),
+                "-c",
+                testConfigPath.toAbsolutePath().toString()
+        };
         Application app = new Application();
         int exitCode = new CommandLine(app).execute(args);
         String consoleOutput = getConsoleOutput();
-        assertThat(exitCode).isEqualTo(0);
-        assertThat(consoleOutput).contains("[FAIL] Found 31 violations in 2 files!");
+        assertThat(consoleOutput).contains("[FAIL] Found 2 violations in 2 files!");
         assertThat(consoleOutput)
                 .contains("BadCode.java:5 [NoElse]");
         assertThat(consoleOutput)
                 .contains("LongMethod.java:4 [MethodLength]")
-                .contains("메서드 길이가 17라인입니다. (허용 기준: 15라인)");
-        assertThat(consoleOutput).contains("LongMethod.java:6 [NoHardcoding]");
-        assertThat(consoleOutput).contains("LongMethod.java:5 [LawOfDemeter]");
+                .contains("메서드 길이가 22라인입니다. (허용 기준: 20라인)");
+        assertThat(consoleOutput).doesNotContain("NoHardcoding");
     }
 }

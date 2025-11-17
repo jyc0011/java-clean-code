@@ -3,6 +3,7 @@ package clean.code;
 import clean.code.config.AppConfig;
 import clean.code.core.CodeCheckRunner;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 
@@ -20,6 +21,12 @@ public class Application implements Callable<Integer> {
     )
     Path projectPath;
 
+    @CommandLine.Option(
+            names = {"-c", "--config"},
+            description = "규칙 설정 JSON 파일 경로 (기본값: 실행 위치의 checker-config.json)"
+    )
+    Path configPath;
+
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Application()).execute(args);
         System.exit(exitCode);
@@ -30,7 +37,10 @@ public class Application implements Callable<Integer> {
      */
     @Override
     public Integer call() throws Exception {
-        AppConfig appConfig = new AppConfig();
+        if (configPath == null) {
+            configPath = Paths.get(System.getProperty("user.dir"), "checker-config.json");
+        }
+        AppConfig appConfig = new AppConfig(configPath);
         CodeCheckRunner runner = appConfig.codeCheckRunner();
         runner.run(projectPath);
         return 0;

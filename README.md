@@ -164,3 +164,81 @@ Picocli
 - Testing: JUnit 5, AssertJ
 
 ---
+
+## 🚀 Git Pre-commit Hook 연동하기
+
+`git commit`을 실행할 때마다 이 검사기를 자동으로 실행하여, 클린 코드 위반 사항이 있으면 커밋을 중단시킬 수 있습니다.
+
+### 1. Fat JAR 빌드
+
+먼저, 모든 의존성이 포함된 실행 가능한 JAR 파일을 빌드합니다.
+
+```bash
+# 프로젝트 루트에서 실행
+./gradlew clean shadowJar
+```
+
+### 2. pre-commit 스크립트 설정
+검사를 원하는 다른 프로젝트(예: /path/to/my-project)로 이동하여, 해당 프로젝트의 Git Hook을 설정합니다.
+
+```bash
+# 1. 검사하고 싶은 프로젝트로 이동
+cd /path/to/my-project
+
+# 2. .git/hooks/pre-commit 파일 생성
+touch .git/hooks/pre-commit
+
+# 3. pre-commit 파일에 실행 권한 부여
+chmod +x .git/hooks/pre-commit
+```
+
+### 3. 스크립트 작성
+방금 생성한 .git/hooks/pre-commit 에 해당 내용 추가
+```bash
+#!/bin/sh
+
+# -----------------------------------------------
+# --- Java Clean Code Checker Pre-commit Hook ---
+# -----------------------------------------------
+
+# 1. 빌드된 'java-clean-code-checker.jar'의 절대 경로
+# ❗️❗️ 이 경로를 사용자의 실제 JAR 경로로 수정하세요! ❗️❗️
+CHECKER_JAR_PATH="/Users/me/dev/java-clean-code/build/libs/java-clean-code-1.0-SNAPSHOT-all.jar"
+
+# 2. (선택) 설정 파일(JSON)의 절대 경로 (없으면 기본값 사용)
+# CONFIG_PATH="/Users/me/dev/java-clean-code/checker-config.json"
+
+# 3. 검사할 이 프로젝트의 소스 경로
+SRC_PATH="./src/main/java"
+
+
+# --- 실행 ---
+echo "Running Java Clean Code Checker..."
+
+# 설정 파일이 있는 경우
+# CONFIG_ARG="-c $CONFIG_PATH"
+
+# 설정 파일이 없는 경우 (CONFIG_ARG를 비워둠)
+CONFIG_ARG=""
+
+# 4. 검사기 실행 (자바 17+ 필요)
+# (경로에 공백이 있어도 처리되도록 "$SRC_PATH" 사용)
+RESULT=$(java -jar "$CHECKER_JAR_PATH" "$SRC_PATH" $CONFIG_ARG)
+
+echo "-----------------------------------------------"
+echo "$RESULT"
+echo "-----------------------------------------------"
+
+
+# 5. 결과 분석
+# 출력된 결과(RESULT)에 '[FAIL]' 문자열이 포함되어 있는지 확인
+if echo "$RESULT" | grep -q "\[FAIL\]"; then
+  echo "🔴 Clean Code Violations Found! Commit aborted."
+  exit 1
+else
+  echo "✅ Clean Code Check Passed. Proceeding with commit."
+  exit 0
+fi
+```
+
+git commit 실행 시 같이 실행됨

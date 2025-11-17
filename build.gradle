@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = 'clean.code'
@@ -11,9 +12,12 @@ repositories {
 }
 
 dependencies {
-    // Core Libraries
+    // AST
     implementation("com.github.javaparser:javaparser-core:3.25.10")
+    // CLI 입출력
     implementation("info.picocli:picocli:4.7.6")
+    // parse json
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
 
     // Testing Libraries
     testImplementation(platform("org.junit:junit-bom:5.10.2"))
@@ -34,4 +38,15 @@ application {
 
 test {
     useJUnitPlatform()
+}
+
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = "clean.code.Application"
+    }
+    mergeServiceFiles()
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }

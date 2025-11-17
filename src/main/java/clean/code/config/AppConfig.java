@@ -6,6 +6,7 @@ import clean.code.core.ProjectScanner;
 import clean.code.report.ConsoleReporter;
 import clean.code.rules.Rule;
 import clean.code.rules.RuleRegistry;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -13,8 +14,15 @@ import java.util.List;
  */
 public class AppConfig {
 
+    private final AppRuleConfig appRuleConfig;
+
+    public AppConfig(Path configPath) {
+        ConfigLoader configLoader = new ConfigLoader();
+        this.appRuleConfig = configLoader.load(configPath);
+    }
+
     public RuleRegistry ruleRegistry() {
-        return new RuleRegistry();
+        return new RuleRegistry(this.appRuleConfig);
     }
 
     public ProjectScanner projectScanner() {

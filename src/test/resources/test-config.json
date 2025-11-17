@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "NoElse": {
+      "status": "on"
+    },
+    "MethodLength": {
+      "status": "on",
+      "max": 20
+    },
+    "NamingConvention": {
+      "status": "off"
+    }
+  }
+}
