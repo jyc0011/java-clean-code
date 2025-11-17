@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-// Core Libraries
+    // Core Libraries
     implementation("com.github.javaparser:javaparser-core:3.25.10")
     implementation("info.picocli:picocli:4.7.6")
 

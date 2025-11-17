@@ -2,10 +2,9 @@ package clean.code;
 
 import clean.code.config.AppConfig;
 import clean.code.core.CodeCheckRunner;
-import picocli.CommandLine;
-
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
+import picocli.CommandLine;
 
 @CommandLine.Command(
         name = "code-checker",
@@ -21,6 +20,11 @@ public class Application implements Callable<Integer> {
     )
     Path projectPath;
 
+    public static void main(String[] args) {
+        int exitCode = new CommandLine(new Application()).execute(args);
+        System.exit(exitCode);
+    }
+
     /**
      * Picocli가 실행하는 메인 로직
      */
@@ -30,10 +34,5 @@ public class Application implements Callable<Integer> {
         CodeCheckRunner runner = appConfig.codeCheckRunner();
         runner.run(projectPath);
         return 0;
-    }
-
-    public static void main(String[] args) {
-        int exitCode = new CommandLine(new Application()).execute(args);
-        System.exit(exitCode);
     }
 }
