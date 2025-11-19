@@ -24,7 +24,7 @@ Git Hook과 연동하여 커밋 전에 자동으로 코드를 점검할 수 있�
 ## ✨ 주요 기능
 
 - CLI 기반 동작: 터미널에서 간단한 명령어로 프로젝트 전체를 스캔
-- AST 기반 분석: JavaParser를 이용한 AST(Abstract Syntax Tree) 분석으로 정확한 문맥을 파악
+- AST 기반 분석: JavaParser를 이용한 [AST(Abstract Syntax Tree)](https://velog.io/@jyc0011/AST) 분석으로 정확한 문맥을 파악
 - 검증:
     1. Style Check: Google Java Style Guide 준수 여부 확인
     2. Clean Code Check: 메서드 길이, 들여쓰기(Indent) 깊이 등 가독성 저해 요소 감지
